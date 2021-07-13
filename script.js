@@ -40,6 +40,11 @@ const countriesContainer = document.querySelector('.countries');
 // getCoutrydata('usa');
 // getCoutrydata('china');
 
+const rednerError = function (msg) {
+  countriesContainer.insertAdjacentHTML('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+};
+
 const renderHtml = function (data, className = '') {
   const html = `
   <article class="country ${className}">
@@ -56,7 +61,7 @@ const renderHtml = function (data, className = '') {
     </article>
     `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 
 // const getCoutryAndNeighbour = function (country) {
@@ -115,9 +120,19 @@ const renderHtml = function (data, className = '') {
 
 // getCountryData('usa');
 
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} ${response.status}`);
+
+    return response.json();
+  });
+};
+
 const getCountryData = function (country) {
-  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    .then(response => response.json())
+  getJSON(
+    `https://restcountries.eu/rest/v2/name/${country}`,
+    `Country not found`
+  )
     .then(data => {
       renderHtml(data[0]);
 
@@ -125,10 +140,49 @@ const getCountryData = function (country) {
 
       if (!neighbour) return;
       //Country 2
-      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+      return getJSON(
+        `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
+        `Country not found`
+      );
     })
-    .then(response => response.json())
-    .then(data => renderHtml(data, 'neighbour'));
-};
 
-getCountryData('spain');
+    .then(data => renderHtml(data, 'neighbour'))
+    .catch(err => {
+      console.error(`${err} 🤯🤯🤯`);
+      rednerError(`Somethis is wrong🤯 ${err}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+// Refernce
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok) throw new Error(`Country not found ${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderHtml(data[0]);
+
+//       const neighbour = data[0].borders[0];
+
+//       if (!neighbour) return;
+//       //Country 2
+//       return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+//     })
+//     .then(response => response.json())
+//     .then(data => renderHtml(data, 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err} 🤯🤯🤯`);
+//       rednerError(`Somethis is wrong🤯 ${err}`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
+btn.addEventListener('click', function () {
+  getCountryData('spain');
+});

@@ -138,7 +138,7 @@ const getCountryData = function (country) {
 
       const neighbour = data[0].borders[0];
 
-      if (!neighbour) return;
+      if (!neighbour) throw new Error('No Neighbour found!');
       //Country 2
       return getJSON(
         `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
@@ -186,3 +186,14 @@ const getCountryData = function (country) {
 btn.addEventListener('click', function () {
   getCountryData('spain');
 });
+
+navigator.geolocation.getCurrentPosition(data => {
+  const myLocation = data.coords.latitude;
+});
+
+const whereAmI = function (lat, lng) {
+  fetch('https://geocode.xyz/lat,lng?geoit=json').then(response => {
+    console.log(response);
+    return response.json();
+  });
+};

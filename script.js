@@ -183,9 +183,9 @@ const getCountryData = function (country) {
 //     });
 // };
 
-btn.addEventListener('click', function () {
-  getCountryData('spain');
-});
+// btn.addEventListener('click', function () {
+//   getCountryData('spain');
+// });
 
 navigator.geolocation.getCurrentPosition(data => {
   const myLocation = data.coords.latitude;

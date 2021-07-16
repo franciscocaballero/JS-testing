@@ -187,13 +187,30 @@ const getCountryData = function (country) {
 //   getCountryData('spain');
 // });
 
-navigator.geolocation.getCurrentPosition(data => {
-  const myLocation = data.coords.latitude;
-});
+// navigator.geolocation.getCurrentPosition(data => {
+//   console.log(data);
+//   const lat = data.coords.latitude;
+//   const lng = data.coords.longitude;
+//   console.log(lat, lng);
+// });
 
 const whereAmI = function (lat, lng) {
-  fetch('https://geocode.xyz/lat,lng?geoit=json').then(response => {
-    console.log(response);
-    return response.json();
-  });
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(response => {
+      console.log(response);
+      if (response.status === 403)
+        throw new Error(`Something went wrong ERROR:${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`Your are in ${data.statename}, ${data.country}`);
+      getCountryData(data.country);
+    })
+    .catch(err => {
+      console.error(`${err.message}`);
+    });
 };
+
+//38.8599262 -77.0648597
+whereAmI(38.8599262, -77.0648597);

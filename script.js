@@ -194,6 +194,76 @@ const getCountryData = function (country) {
 //   console.log(lat, lng);
 // });
 
+// const whereAmI = function (lat, lng) {
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then(response => {
+//       console.log(response);
+//       if (response.status === 403)
+//         throw new Error(`Something went wrong ERROR:${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       console.log(data);
+//       console.log(`Your are in ${data.statename}, ${data.country}`);
+//       getCountryData(data.country);
+//     })
+//     .catch(err => {
+//       console.error(`${err.message}`);
+//     });
+// };
+
+//38.8599262 -77.0648597
+whereAmI(38.8599262, -77.0648597);
+
+// console.log('Test Start');
+// setTimeout(() => console.log('0 sec timer'), 0);
+
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   console.log('lotter draw is happening');
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve('You WIN 💰');
+//     } else {
+//       reject('You lost your money');
+//     }
+//   }, 2000);
+// });
+
+// lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
+
+// // Promisifying a setTimeout
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(2)
+//   .then(() => {
+//     console.log('one second');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('two seconds');
+//   });
+
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.log(err)
+// );
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+getPosition().then(pos => console.log(pos));
+
 const whereAmI = function (lat, lng) {
   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
     .then(response => {
@@ -211,6 +281,3 @@ const whereAmI = function (lat, lng) {
       console.error(`${err.message}`);
     });
 };
-
-//38.8599262 -77.0648597
-whereAmI(38.8599262, -77.0648597);

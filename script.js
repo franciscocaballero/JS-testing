@@ -213,7 +213,7 @@ const getCountryData = function (country) {
 // };
 
 //38.8599262 -77.0648597
-whereAmI(38.8599262, -77.0648597);
+// whereAmI(38.8599262, -77.0648597);
 
 // console.log('Test Start');
 // setTimeout(() => console.log('0 sec timer'), 0);
@@ -264,8 +264,13 @@ const getPosition = function () {
 
 getPosition().then(pos => console.log(pos));
 
-const whereAmI = function (lat, lng) {
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+
     .then(response => {
       console.log(response);
       if (response.status === 403)
@@ -281,3 +286,22 @@ const whereAmI = function (lat, lng) {
       console.error(`${err.message}`);
     });
 };
+
+// btn.addEventListener('click', whereAmI);
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve) {
+    resolve(function () {
+      // const pic = document.createElement('img');
+      // pic.src = imgPath;
+      // document.getElementById('body').appendChild(img);
+      console.log('test');
+    });
+  });
+};
+
+createImage('../img/img-1.jpg')
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => console.log(err));

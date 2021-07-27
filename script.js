@@ -231,12 +231,12 @@ const getCountryData = function (country) {
 
 // lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
 
-// // Promisifying a setTimeout
-// const wait = function (seconds) {
-//   return new Promise(function (resolve) {
-//     setTimeout(resolve, seconds * 1000);
-//   });
-// };
+// Promisifying a setTimeout
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
 
 // wait(2)
 //   .then(() => {
@@ -289,19 +289,35 @@ const whereAmI = function () {
 
 // btn.addEventListener('click', whereAmI);
 
+const pic = document.createElement('img');
+
+const hideImg = function () {
+  wait(2);
+  pic.style.display = 'none';
+  pic.style.display = '';
+};
+
 const createImage = function (imgPath) {
   return new Promise(function (resolve) {
-    resolve(function () {
-      // const pic = document.createElement('img');
-      // pic.src = imgPath;
-      // document.getElementById('body').appendChild(img);
-      console.log('test');
+    pic.src = imgPath;
+    pic.addEventListener('load', e => {
+      document.querySelector('.images').appendChild(pic);
     });
+    resolve(`${pic}`);
   });
 };
 
 createImage('../img/img-1.jpg')
-  .then(res => {
-    console.log(res);
+  .then(data => {
+    console.log(data);
+    pic.addEventListener('load', hideImg);
+    createImage('../img/img-2.jpg');
+    pic.addEventListener('load', hideImg);
   })
-  .catch(err => console.log(err));
+  .catch(err => console.log(`${err.message}`));
+
+// wait(2)
+//   .then(() => {
+//     console.log('one second');
+//     return wait(1);
+//   })

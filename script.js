@@ -382,21 +382,28 @@ const getPosition = function () {
 
 const whereAmI = async function (country) {
   //Geolocation
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
 
-  //Reverse geolocation
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-  const dataGeo = await resGeo.json();
-  console.log(dataGeo);
-  //XCoutry data
-  const res = await fetch(
-    `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
-  );
+    //Reverse geolocation
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!resGeo.ok) throw new Error('problem getting location data');
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
+    //XCoutry data
+    const res = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    );
 
-  const data = await res.json();
-  console.log(data);
-  renderHtml(data[0]);
+    const data = await res.json();
+    if (!res.ok) throw new Error('problem getting location data');
+
+    console.log(data);
+    renderHtml(data[0]);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // /     .then(pos => {
@@ -404,5 +411,5 @@ const whereAmI = async function (country) {
 //   //       return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 //   //     })
 
-whereAmI();
+whereAmI(`khjsflk`);
 console.log('first');

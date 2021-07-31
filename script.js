@@ -413,40 +413,103 @@ const whereAmI = async function (country) {
 //   //       return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 //   //     })
 
-whereAmI();
-console.log('first');
+// whereAmI();
+// console.log('first');
 
-(async function () {
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(`2; ${city}`);
+//   } catch (err) {
+//     console.log(`2: ${err.message} `);
+//   }
+//   console.log(`3: Finshed getting location`);
+// })();
+
+// const get3Countries = async function (c1, c2, c3) {
+//   try {
+//     // const [data1] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c1}`
+//     // );
+//     // const [data2] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c2}`
+//     // );
+//     // const [data3] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c3}`
+//     // );
+
+//     const data = await Promise.all([
+//       getJSON(`https://restcountries.eu/rest/v2/name/${c1}`),
+//       getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
+//       getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
+//     ]);
+//     console.log(data.map(d => d[0].capital));
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+// get3Countries('usa', 'japan', 'spain');
+
+// //Challenge number 3:
+
+const pic = document.createElement('img');
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    pic.src = imgPath;
+    pic.addEventListener('load', e => {
+      document.querySelector('.images').appendChild(pic);
+      resolve(`${pic}`);
+    });
+    pic.addEventListener('error', event => {
+      reject(new Error('img not found '));
+    });
+  });
+};
+
+let currentImg;
+const loadNPause = async function () {
   try {
-    const city = await whereAmI();
-    console.log(`2; ${city}`);
-  } catch (err) {
-    console.log(`2: ${err.message} `);
-  }
-  console.log(`3: Finshed getting location`);
-})();
+    let response = await createImage('../img/img-1.jpg');
+    currentImg = pic;
+    console.log('img 1 has been loaded');
+    await wait(2);
+    // currentImg.style.display = 'none';
+    let res2 = await createImage('../img/img-2.jpg');
+    currentImg = pic;
+    console.log('image 2 loaded');
+    await wait(2);
+    // wait(2);
 
-const get3Countries = async function (c1, c2, c3) {
-  try {
-    // const [data1] = await getJSON(
-    //   `https://restcountries.eu/rest/v2/name/${c1}`
-    // );
-    // const [data2] = await getJSON(
-    //   `https://restcountries.eu/rest/v2/name/${c2}`
-    // );
-    // const [data3] = await getJSON(
-    //   `https://restcountries.eu/rest/v2/name/${c3}`
-    // );
-
-    const data = await Promise.all([
-      getJSON(`https://restcountries.eu/rest/v2/name/${c1}`),
-      getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
-      getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
-    ]);
-    console.log(data.map(d => d[0].capital));
+    // if (!response.ok) throw new Error('problem getting location data');
   } catch (err) {
     console.error(err);
   }
 };
 
-get3Countries('usa', 'japan', 'spain');
+loadNPause();
+
+// let currentImg;
+// createImage('../img/img-1.jpg')
+//   .then(data => {
+//     currentImg = pic;
+//     console.log('img 1 has been loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('../img/img-2.jpg');
+//   })
+//   .then(pic => {
+//     currentImg = pic;
+//     console.log('image 2 loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     // currentImg.style.display = 'none';
+//   })
+
+//   .catch(err => console.log(`${err.message}`));
+
+// using async await
